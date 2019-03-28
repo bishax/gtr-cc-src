@@ -34,11 +34,6 @@ def main(train_size, test_size, random_state):
     df_train.to_csv(f"{data_dir}/processed/gtr_train.csv")
     df_test.to_csv(f"{data_dir}/processed/gtr_test.csv")
 
-    print(df_train.head())
-    import pdb
-    pdb.set_trace()
-
-
 
 if __name__ == '__main__':
     log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
