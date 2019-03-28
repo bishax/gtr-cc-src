@@ -3,7 +3,7 @@ import numpy as np
 
 def train_w2v(docs):
     w2v = gensim.models.Word2Vec(docs,
-    size=300, window=10, min_count=2, iter=20)
+    size=50, window=10, min_count=2, iter=20)
 
     return w2v
 
