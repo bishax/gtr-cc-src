@@ -1,0 +1,11 @@
+cmd: python src/models/predict_model.py
+deps:
+- md5: 43547ed8a475b3c3408f6f7378564ae6
+  path: data/processed/gtr_train.csv
+md5: 819653f9f356598a1296f0689c00b3aa
+outs:
+- cache: true
+  md5: a027e80147aa6fd9386c15b0a9a2e754
+  metric: false
+  path: models/gtr_forest.pkl
+wdir: ..
