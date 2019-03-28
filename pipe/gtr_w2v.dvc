@@ -1,15 +1,15 @@
 cmd: python src/features/build_features.py
 deps:
-- md5: eccc80950ef3668f2f4246ceaeba5c00
+- md5: b85aaeb8391568c446da55b8789fdcda
   path: data/processed/gtr_tokenised.csv
-md5: b6bc4a47784404730d92543062c4b1e7
+md5: c03040821b41b4966f8d7edfc2f53af1
 outs:
 - cache: true
-  md5: 11f419b2fea41332ad5880beb49b8696
+  md5: 9e810b9e5ff0e67abfdbf79df07dc87a
   metric: false
   path: models/gtr_w2v
 - cache: true
-  md5: 883c7e4f23972f5162382e3e1c2c1383
+  md5: 0db8984bf6f1115364322825e25ecb88
   metric: false
   path: data/processed/gtr_embedding.csv
 wdir: ..

@@ -5,7 +5,7 @@ def make_gtr(data_dir):
     """
     """
 
-    gtr_df = (pd.read_csv(f"{data_dir}/raw/gtr_projects.csv", nrows=1000)
+    gtr_df = (pd.read_csv(f"{data_dir}/raw/gtr_projects.csv", nrows=None)
             .pipe(clean_gtr)
             .pipe(transform_gtr)
             .to_csv(f"{data_dir}/processed/gtr_tokenised.csv")
@@ -33,5 +33,5 @@ def transform_gtr(gtr_df):
             .query("is_doc > 0")
                 )
 
-    return gtr_df.join(processed)
+    return gtr_df.join(processed).dropna()
 

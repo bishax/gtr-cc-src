@@ -2,10 +2,10 @@ cmd: python src/data/make_dataset.py
 deps:
 - md5: 56640d8487a9d26114a2fdb9e9aa1c83
   path: data/raw/gtr_projects.csv
-md5: 304f4547cc54e1b0250846a2ed607099
+md5: c7837e02d7567d26983eeed18640ad42
 outs:
 - cache: true
-  md5: eccc80950ef3668f2f4246ceaeba5c00
+  md5: b85aaeb8391568c446da55b8789fdcda
   metric: false
   path: data/processed/gtr_tokenised.csv
 wdir: ..
