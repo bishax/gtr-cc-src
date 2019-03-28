@@ -1,0 +1,4 @@
+['remote "upstream"']
+url = s3://nesta-dvc-test/dvc
+[core]
+remote = upstream
