@@ -4,12 +4,16 @@ pandas
 matplotlib
 jupyter
 ipython
+scikit-learn
+gensim
+nltk
 
 # local package
 -e .
 
 # external requirements
-jq
+dvc[s3]
+# jq
 click
 Sphinx
 coverage

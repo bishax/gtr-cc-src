@@ -1,11 +1,11 @@
-.PHONY: clean data lint requirements sync_data_to_s3 sync_data_from_s3
+.PHONY: init clean data lint requirements sync_data_to_s3 sync_data_from_s3
 
 #################################################################################
 # GLOBALS                                                                       #
 #################################################################################
 
 PROJECT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
-BUCKET = s3://nesta-dvc-test/gtr-cc/
+BUCKET = nesta-dvc-test/gtr-cc
 PROFILE = default
 PROJECT_NAME = gtr-cc-src
 PYTHON_INTERPRETER = python3
@@ -25,12 +25,16 @@ requirements: test_environment
 	$(PYTHON_INTERPRETER) -m pip install -U pip setuptools wheel
 	$(PYTHON_INTERPRETER) -m pip install -r requirements.txt
 
+## DVC
+dvc:
+	echo dvc
+
 ## Make init
 init: 
 	echo -e "[filter \"nbstrip_full\"]\n clean = \"jq --indent 1 \\\n '(.cells[] | select(has(\\\"outputs\\\")) | .outputs) = []  \\\n | (.cells[] | select(has(\\\"execution_count\\\")) | .execution_count) = null  \\\n | .metadata = {\\\"language_info\\\": {\\\"name\\\": \\\"python\\\", \\\"pygments_lexer\\\": \\\"ipython3\\\"}} \\\n | .cells[].metadata = {} \\\n '\"\n smudge = cat\n required = true\n " >> .git/config  # Copy git hook
 
 ## Make Dataset
-data: requirements
+data:# requirements
 	$(PYTHON_INTERPRETER) src/data/make_dataset.py
 
 ## Delete all compiled Python files
@@ -45,17 +49,17 @@ lint:
 ## Upload Data to S3
 sync_data_to_s3:
 ifeq (default,$(PROFILE))
-	aws s3 sync data/ s3://$(BUCKET)/data/{raw,processed}
+	aws s3 sync data/raw s3://$(BUCKET)/data/raw
 else
-	aws s3 sync data/ s3://$(BUCKET)/data/{raw,processed} --profile $(PROFILE)
+	aws s3 sync data/raw s3://$(BUCKET)/data/raw --profile $(PROFILE)
 endif
 
 ## Download Data from S3
 sync_data_from_s3:
 ifeq (default,$(PROFILE))
-	aws s3 sync s3://$(BUCKET)/data/ data/
+	aws s3 sync s3://$(BUCKET)/data/raw data/raw
 else
-	aws s3 sync s3://$(BUCKET)/data/ data/ --profile $(PROFILE)
+	aws s3 sync s3://$(BUCKET)/data/raw data/raw --profile $(PROFILE)
 endif
 
 ## Set up python interpreter environment
@@ -63,7 +67,6 @@ create_environment:
 ifeq (True,$(HAS_CONDA))
 		@echo ">>> Detected conda, creating conda environment."
 	conda create --name $(PROJECT_NAME) python=3
-endif
 		@echo ">>> New conda env created. Activate with:\nsource activate $(PROJECT_NAME)"
 else
 	$(PYTHON_INTERPRETER) -m pip install -q virtualenv virtualenvwrapper
