@@ -1,0 +1,17 @@
+cmd: python src/models/train_test_split.py
+deps:
+- md5: d9daa73d46bf1012c5caba8e8636829a
+  path: data/processed/gtr_embedding.csv
+- md5: eccc80950ef3668f2f4246ceaeba5c00
+  path: data/processed/gtr_tokenised.csv
+md5: 100504b00ab92771c3f6932ee04f8039
+outs:
+- cache: true
+  md5: 43547ed8a475b3c3408f6f7378564ae6
+  metric: false
+  path: data/processed/gtr_train.csv
+- cache: true
+  md5: 67b2bb7d9e497b355b335d3a3e2e6a4b
+  metric: false
+  path: data/processed/gtr_test.csv
+wdir: ..
