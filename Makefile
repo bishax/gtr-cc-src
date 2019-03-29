@@ -1,4 +1,4 @@
-.PHONY: init clean data lint requirements sync_data_to_s3 sync_data_from_s3 test1 test2
+.PHONY: init clean data lint requirements sync_data_to_s3 sync_data_from_s3 pipeline all
 
 #################################################################################
 # GLOBALS                                                                       #
