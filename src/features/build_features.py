@@ -41,7 +41,7 @@ if __name__ == '__main__':
     # load up the .env entries as environment variables
     load_dotenv(find_dotenv())
 
-    data_dir = find_dotenv()[:-4] + '/data/'
+    data_dir = project_dir / 'data'
     print(data_dir)
 
     main(data_dir)
