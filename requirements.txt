@@ -14,7 +14,7 @@ joblib
 
 # external requirements
 dvc
-# jq
+jq
 click
 Sphinx
 coverage
