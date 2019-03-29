@@ -1,4 +1,4 @@
-.PHONY: init clean data lint requirements sync_data_to_s3 sync_data_from_s3
+.PHONY: init clean data lint requirements sync_data_to_s3 sync_data_from_s3 test1 test2
 
 #################################################################################
 # GLOBALS                                                                       #
@@ -12,9 +12,22 @@ PYTHON_INTERPRETER = python3
 
 ifeq (,$(shell which conda))
 HAS_CONDA=False
+CONDA_ROOT=$(shell conda info --root)
 else
 HAS_CONDA=True
 endif
+
+# Define utility variable to help calling Python from the virtual environment
+ifeq ($(CONDA_DEFAULT_ENV),$(PROJECT_NAME))
+    ACTIVATE_ENV := true
+else
+    ACTIVATE_ENV := source activate $(PROJECT_NAME)
+endif
+
+# Execute python related functionalities from within the project's environment
+define execute_in_env
+	$(ACTIVATE_ENV) && $1
+endef
 
 #################################################################################
 # COMMANDS                                                                      #
@@ -26,8 +39,19 @@ requirements: test_environment
 	$(PYTHON_INTERPRETER) -m pip install -r requirements.txt
 
 ## DVC
-dvc:
-	echo dvc
+pipeline:
+	-dvc pull
+ifneq ($(wildcard pipe/Dvcfile), )
+	dvc repro pipe/Dvcfile
+else
+	$(error No file pipe/Dvcfile to build pipeline)
+endif
+
+all: 
+	make create_environment
+	$(call execute_in_env, make requirements)
+	$(call execute_in_env, make pipeline)
+
 
 ## Make init
 init: 

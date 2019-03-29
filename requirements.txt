@@ -13,7 +13,7 @@ joblib
 -e .
 
 # external requirements
-dvc[s3]
+dvc
 # jq
 click
 Sphinx
