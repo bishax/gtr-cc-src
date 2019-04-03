@@ -5,14 +5,12 @@ from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
 
 import pandas as pd
-import numpy as np
 import ast
 from src.features.w2v import train_w2v, document_vector
 
 
-#@click.command()
-#@click.argument('input_filepath', type=click.Path(exists=True))
-#@click.argument('output_filepath', type=click.Path())
+@click.command()
+@click.argument('data_dir', type=click.Path(exists=True))
 def main(data_dir):
     """ Runs data processing scripts to turn cleaned data from (../processed) into
         features ready to train models (saved in ../processed).
@@ -21,14 +19,25 @@ def main(data_dir):
 
     logger.info('load gateway to research data')
     docs = (pd.read_csv(f"{data_dir}/processed/gtr_tokenised.csv",
-            usecols=['processed_documents']).processed_documents.apply(ast.literal_eval))
+            usecols=['processed_documents'])
+            .processed_documents
+            .apply(ast.literal_eval))
+
     logger.info('making gateway to research word embeddings')
     w2v = train_w2v(docs)
-    w2v.save(f"{project_dir}/models/gtr_w2v")
+    w2v_out = f"{project_dir}/models/gtr_w2v"
+    logger.info(f'saving gateway to research word embeddings to {w2v_out}')
+    w2v.save(w2v_out)
 
     logger.info('making gateway to research document vectors')
-    doc_vecs = pd.DataFrame([document_vector(w2v, doc) for doc in docs], index=docs.index, columns=[f'dim_{i}' for i in range(w2v.vector_size)]).to_csv(f"{data_dir}/processed/gtr_embedding.csv")
+    doc_vecs = (pd.DataFrame([document_vector(w2v, doc) for doc in docs],
+            index=docs.index,
+            columns=[f'dim_{i}' for i in range(w2v.vector_size)])
+            )
 
+    docs_out = f"{data_dir}/processed/gtr_embedding.csv"
+    logger.info(f'saving gateway to research document vectors to {docs_out}')
+    doc_vecs.to_csv(docs_out)
 
 if __name__ == '__main__':
     log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
@@ -42,6 +51,5 @@ if __name__ == '__main__':
     load_dotenv(find_dotenv())
 
     data_dir = project_dir / 'data'
-    print(data_dir)
 
-    main(data_dir)
+    main()

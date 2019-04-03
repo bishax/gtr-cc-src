@@ -1,7 +1,0 @@
-md5: 24fce89e42e35396bd6b06efaa45bc69
-outs:
-- cache: true
-  md5: 56640d8487a9d26114a2fdb9e9aa1c83
-  metric: false
-  path: data/raw/gtr_projects.csv
-wdir: ../..

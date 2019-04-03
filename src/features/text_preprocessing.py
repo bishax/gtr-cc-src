@@ -12,18 +12,18 @@ stop_words = set(stopwords.words('english') +
                  ['\\n'] + ['quot'])
 
 regex_str = ["http[s]?://(?:[a-z]|[0-9]|[$-_@.&+]|"
-             "[!*\(\),](?:%[0-9a-f][0-9a-f]))+",
-             "(?:\w+-\w+){2}",
-             "(?:\w+-\w+)",
-             "(?:\\\+n+)",
-             "(?:@[\w_]+)",
+             r"[!*\(\),](?:%[0-9a-f][0-9a-f]))+",
+             r"(?:\w+-\w+){2}",
+             r"(?:\w+-\w+)",
+             r"(?:\\\+n+)",
+             r"(?:@[\w_]+)",
              "<[^>]+>",
-             "(?:\w+'\w)",
-             "(?:[\w_]+)",
+             r"(?:\w+'\w)",
+             r"(?:[\w_]+)",
              "(?:\S)"]
 
 # Create the tokenizer which will be case insensitive and will ignore space.
-tokens_re = re.compile(r'('+'|'.join(regex_str)+')',
+tokens_re = re.compile(r'(' + '|'.join(regex_str) + ')',
                        re.VERBOSE | re.IGNORECASE)
 
 
@@ -40,7 +40,7 @@ def tokenize_document(text, flatten=False):
 
     if flatten:
         return list(chain(*[clean_and_tokenize(sentence)
-                for sentence in nltk.sent_tokenize(text)]))
+                            for sentence in nltk.sent_tokenize(text)]))
     else:
         return [clean_and_tokenize(sentence)
                 for sentence in nltk.sent_tokenize(text)]
@@ -84,7 +84,7 @@ def build_ngrams(documents, n=2, **kwargs):
     # for doc in documents:
     #     sentences += doc
     # Get the bigrams
-    phrases = gensim.models.Phrases(documents,  min_count=2, threshold=1,
+    phrases = gensim.models.Phrases(documents, min_count=2, threshold=1,
                                     delimiter=b'_')
     bigram = gensim.models.phrases.Phraser(phrases)
     docs_bi = [bigram[doc] for doc in documents]
@@ -92,4 +92,4 @@ def build_ngrams(documents, n=2, **kwargs):
     if level == n:
         return docs_bi
     # Otherwise, keep processing until n-grams satisfied
-    return build_ngrams(docs_bi, n=n, level=level+1)
+    return build_ngrams(docs_bi, n=n, level=level + 1)

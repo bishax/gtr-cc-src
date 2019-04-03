@@ -3,20 +3,19 @@ import click
 import logging
 from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
-from gtr import make_gtr
+from src.data.gtr import make_gtr
 
 
-#@click.command()
-#@click.argument('input_filepath', type=click.Path(exists=True))
-#@click.argument('output_filepath', type=click.Path())
-def main(data_dir):
+@click.command()
+@click.option('--nrows', '-n', default=None, type=int)
+def main(nrows):
     """ Runs data processing scripts to turn raw data from (../raw) into
         cleaned data ready to be analyzed (saved in ../processed).
     """
     logger = logging.getLogger(__name__)
 
-    logger.info('making gateway to research data set from raw data')
-    make_gtr(data_dir)
+    logger.info(f'making gateway to research data set from raw data ({nrows} rows)')
+    make_gtr(data_dir, nrows)
 
 
 if __name__ == '__main__':
@@ -31,6 +30,5 @@ if __name__ == '__main__':
     load_dotenv(find_dotenv())
 
     data_dir = project_dir / 'data'
-    print(data_dir)
 
-    main(data_dir)
+    main()
