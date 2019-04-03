@@ -32,6 +32,7 @@ dvc run -w ..\
   python src/models/predict_model.py
 
 # Evaluate model
+touch ../models/metrics.txt
 dvc run -w ..\
   -d data/processed/gtr_test.csv\
   -d models/gtr_forest.pkl\
