@@ -1,5 +1,6 @@
 #!/bin/bash
 
+set -e
 
 # Clean and tokenise
 dvc run -w ..\

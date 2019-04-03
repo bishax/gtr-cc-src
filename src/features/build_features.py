@@ -10,8 +10,7 @@ from src.features.w2v import train_w2v, document_vector
 
 
 @click.command()
-@click.argument('data_dir', type=click.Path(exists=True))
-def main(data_dir):
+def main():
     """ Runs data processing scripts to turn cleaned data from (../processed) into
         features ready to train models (saved in ../processed).
     """
