@@ -35,7 +35,9 @@ def tokenize_document(text, flatten=False):
         flatten (bool): Whether to flatten out sentences
 
     Return:
-        List of preprocessed and tokenized documents
+        List: preprocessed and tokenized documents
+
+    #UTILS
     """
 
     if flatten:
@@ -53,7 +55,9 @@ def clean_and_tokenize(text):
        text (str): Raw string of text.
 
     Return:
-       tokens (list, str): Preprocessed tokens.
+       list of str: Preprocessed tokens.
+
+    #UTILS
     """
 
     tokens = tokens_re.findall(text)
@@ -70,26 +74,32 @@ def build_ngrams(documents, n=2, **kwargs):
     """Create ngrams using Gensim's phrases.
 
     Args:
-        documents (:obj:`list` of token lists): List of preprocessed and
+        documents (list of token lists): List of preprocessed and
                                                 tokenized documents
         n (int): The `n` in n-gram.
+
+    Return:
+        List: bigrams
+
+    #UTILS
     """
     # Check whether "level" was passed as an argument
     if "level" not in kwargs:
         level = 2
     else:
         level = kwargs["level"]
-    # Generate sentences, as required for gensim Phrases
-    # sentences = []
-    # for doc in documents:
-    #     sentences += doc
-    # Get the bigrams
-    phrases = gensim.models.Phrases(documents, min_count=2, threshold=1,
-                                    delimiter=b'_')
-    bigram = gensim.models.phrases.Phraser(phrases)
-    docs_bi = [bigram[doc] for doc in documents]
-    # If finished
-    if level == n:
-        return docs_bi
-    # Otherwise, keep processing until n-grams satisfied
-    return build_ngrams(docs_bi, n=n, level=level + 1)
+
+    def _build_ngrams(documents, n, level):
+        """ Create ngrams using Gensim's phrases for a given level """
+        phrases = gensim.models.Phrases(documents,  min_count=2, threshold=1, delimiter=b'_')
+        bigram = gensim.models.phrases.Phraser(phrases)
+        docs_bi = [bigram[doc] for doc in documents]
+
+        if level == n:  # If finished
+            return docs_bi
+        else: # Otherwise, keep processing until n-grams satisfied
+            return build_ngrams(docs_bi, n=n, level=level+1)
+
+    docs_bi = _build_ngrams(documents, n, level)
+
+    return docs_bi

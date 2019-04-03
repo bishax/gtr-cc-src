@@ -13,13 +13,25 @@ from sklearn.metrics import accuracy_score
 
 @click.command()
 @click.option('--random_state', type=int, default=0)
-def main(random_state):
+@click.option('--target', type=str, default='funder_name')
+def main(random_state, target):
     """ Runs model
+
+    Args:
+
+        random_state (int, RandomState instance or None, optional):
+            If int, random_state is the seed used by the random number generator;
+            If RandomState instance, random_state is the random number generator;
+            If None, the random number generator is the RandomState instance used
+            by `np.random`. Defaults to 0.
+
+        target (str, optional):
+            The Gateway to Research column name to use as a target
     """
     logger = logging.getLogger(__name__)
 
     Xy = pd.read_csv(f"{data_dir}/processed/gtr_train.csv", index_col=0)
-    X, y = Xy.drop('funder_name', 1), Xy.funder_name
+    X, y = Xy.drop(target, 1), Xy[target]
 
     clf = RandomForestClassifier(n_estimators=100, random_state=random_state)
     clf.fit(X, y)
